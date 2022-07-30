@@ -114,7 +114,7 @@ int16_t inpoint() {
   int16_t x,y;
   uint16_t rc = -1;
 
-  if (chkNinit()) return;   
+  if (chkNinit()) return 0;
   
   if (checkOpen() ||
       getParam(x,true) || getParam(y,false) ||
@@ -217,7 +217,7 @@ void inmsg() {
     return;
 
   // メッセージ部の表示
-  nmsg(lbuf,color,tm);
+  nmsg((char *)lbuf,color,tm);
 }
 #endif
 

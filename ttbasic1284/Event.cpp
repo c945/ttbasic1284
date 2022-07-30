@@ -139,9 +139,9 @@ void iOnPinTimer() {
   uint8_t* lp = getJumplp();
   if (!err) {
     if (fnc == I_TIMER)
-      tevt.param = lp;
+      tevt.param = (uint16_t)lp;
     else 
-      eevt[pin-2].param = lp;
+      eevt[pin-2].param = (uint16_t)lp;
   }
 }
 

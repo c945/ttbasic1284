@@ -1,3 +1,11 @@
+// https://github.com/Tamakichi/ttbasic_MW25616L
+
+/* ATMEAGA 1284P Porting 2022.07.22
+ * PB0  0 - 7  (PWM 3,4,6,7)
+ * PD0  8 - 15 (PWM 12,13,14,15)
+ * PC0  16 - 23
+ * PA0  24 - 31 (Analog)
+ */
 //
 // Arduino Uno互換機+「アクティブマトリクス蛍光表示管（CL-VFD）MW25616L 実験用表示モジュール」対応
 // GPIO機能の実装
@@ -20,7 +28,7 @@
 #define FNC_PWM     2  // PWM
 #define FNC_ANALOG  4  // アナログIN
 
-#ifdef ARDUINO_AVR_MEGA2560
+#if defined(ARDUINO_AVR_MEGA2560)
 // Arduino Mrga2560 ピン機能チェックテーブル
 const PROGMEM uint8_t  pinFunc[] = {
   0,0,1,1|2,1|2,1|2,1|2,1|2,1|2,1|2,        // ポート0 -  9: 
@@ -30,6 +38,14 @@ const PROGMEM uint8_t  pinFunc[] = {
   1,1,1,1,1|2,1|2,1|2,1,1,1,                // ポート40 - 49:   
   1,1,1,1,1|4,1|4,1|4,1|4,1|4,1|4,          // ポート50 - 59: 
   1|4,1|4,1|4,1|4,1|4,1|4,1|4,1|4,1|4,1|4,  // ポート60 - 69:  
+};
+#elif defined(ARDUINO_AVR_ATmega1284)
+// Arduino Mrga1284 ピン機能チェックテーブル
+const PROGMEM uint8_t  pinFunc[] = {
+  1,   1,   1,   1|2, 1|2, 1,   1|2, 1|2,   // 0  - 7  PB0-7(PWM 3,4, 6,7)
+  1,   1,   1,   1,   1,   1,   1|2, 1|2,   // 8  - 15 PD0-7(PWM 14,15)
+  1,   1,   1,   1,   1,   1,   1,   1,     // 16 - 23 PC0-7
+  1|4, 1|4, 1|4, 1|4, 1|4, 1|4, 1|4, 1|4,   // 24 - 31 PA0-7
 };
 #else
 // Arduino Uno/nano/Pro mini ピン機能チェックテーブル
@@ -105,7 +121,7 @@ void iled() {
 int16_t iIN() {
   int16_t pinNo, mode = INPUT, value;
 
-  if ( checkOpen()|| getParam(pinNo,0,TT_MAX_PINNUM, false) ) return; // ピン番号取得
+  if ( checkOpen()|| getParam(pinNo,0,TT_MAX_PINNUM, false) ) return 0; // ピン番号取得
   if (*cip == I_COMMA) {
     cip++;
     if (getParam(mode, false)) return 0;
@@ -322,7 +338,7 @@ int16_t ipulseIn() {
   // ピン利用の有効性チェック
   if ( !IsIO_PIN(dataPin) ) {
     err = ERR_GPIO;
-    return;
+    return 0;
   }
   
   // ピンモードのチェック

@@ -16,7 +16,7 @@
 
 // *** 内部EEPROMフラッシュメモリ管理 ***************
 #include <avr/eeprom.h>
-#ifdef ARDUINO_AVR_MEGA2560
+#if defined(ARDUINO_AVR_MEGA2560) || defined(ARDUINO_AVR_ATmega1284)
   #if PRGAREASIZE <= 512
     #define EEPROM_PAGE_NUM         8      // 全ページ数
     #define EEPROM_PAGE_SIZE        512    // ページ内バイト数
@@ -82,7 +82,7 @@ void iLoadSave(uint8_t mode,uint8_t flgskip) {
       if (*cip == I_EOL) {
         prgno = 0; // 引数省略時はプログラム番号を0とする
       } else if ( getParam(prgno, 0, EEPROM_SAVE_NUM-1, false) ) {
-        return;    // 引数エラー
+        return ;    // 引数エラー
       }
     }    
     topAddr = EEPROM_PAGE_SIZE*prgno;

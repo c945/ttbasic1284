@@ -67,7 +67,7 @@
 //*** 機器依存識別 ********************************
 #define STR_EDITION_ \
 "TOYOSHIKI TINY BASIC\n" \
-"ARDUINO Extended version 0.07\n"
+"ARDUINO Extended version 0.07 MightyCore ATmeaga1284P Edition\n"
 
 //*** 仮想メモリ定義 ******************************
 #define V_VRAM_TOP  0x0000    // VRAM領域先頭
@@ -1689,7 +1689,7 @@ void iGotoGosub(uint8_t mode, uint16_t evtlp) {
   uint8_t* lp;
 
   if (mode == MODE_ONGOTO || mode == MODE_ONGOSUB)
-    lp = evtlp;
+    lp = (uint8_t *)evtlp;
   else 
     lp = getJumplp();     // 飛び先行ポインタ
 
@@ -2299,9 +2299,12 @@ int16_t ivalue() {
        cip++;
     } else
 #if USE_ANADEF == 1
- #ifdef ARDUINO_AVR_MEGA2560
+ #if defined(ARDUINO_AVR_MEGA2560)
     if (*cip >= I_A0 && *cip <=I_A15) {
        value = 54 +  (*cip-I_A0);
+ #elif defined(ARDUINO_AVR_ATmega1284)
+    if (*cip >= I_A0 && *cip <=I_A7) {
+       value = 24 +  (*cip-I_A0);
  #else
     if (*cip >= I_A0 && *cip <=I_A7) {
        value = 14 +  (*cip-I_A0);
