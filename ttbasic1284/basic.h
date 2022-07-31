@@ -42,7 +42,7 @@
 // ピン数の定義
 #if defined(ARDUINO_AVR_MEGA2560)
  #define TT_MAX_PINNUM 69
-#elif defined(__AVR_ATmega1284P__)
+#elif defined(ARDUINO_AVR_ATmega1284)
  #define TT_MAX_PINNUM 32
 #else
  #define TT_MAX_PINNUM 21
